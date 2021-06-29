@@ -10,7 +10,7 @@ spec:
   selector:
     matchLabels:
       app: mysql
-  replicas: 3
+  replicas: 2
   template:
     metadata:
       labels:
@@ -22,3 +22,15 @@ spec:
           env:
             - name: MYSQL_ROOT_PASSWORD
               value: root
+          volumeMounts:
+            - mountPath: /var/lib/mysql
+              name: mysql-volume
+  volumeClaimTemplates: # When a new replica is created, a persistent volume claim is made
+    - metadata:
+        name: mysql-volume
+      spec:
+        accessModes:
+          - ReadWriteOnce
+        resources:
+          requests:
+            storage: 5Gi
