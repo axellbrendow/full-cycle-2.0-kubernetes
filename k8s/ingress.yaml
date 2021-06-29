@@ -1,0 +1,26 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-host
+  labels:
+    name: ingress-host
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    cert-manager.io/cluster-issuer: "letsencrypt"
+    ingress.kubernetes.io/force-ssl-redirect: "true"
+spec:
+  rules:
+  - host: "a77f365be5e6d445186d1d3605f74df9-1396935491.us-east-1.elb.amazonaws.com"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: goserver
+            port: 
+              number: 80
+  tls:
+  - hosts:
+    - "a77f365be5e6d445186d1d3605f74df9-1396935491.us-east-1.elb.amazonaws.com"
+    secretName: letsencrypt-tls
