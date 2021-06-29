@@ -26,3 +26,11 @@ https://cert-manager.io/docs/installation/kubernetes/
 ```sh
 kubectl apply -f https://github.com/jetstack/cert-manager/releases/download/v1.4.0/cert-manager.yaml
 ```
+
+# Utils
+
+```sh
+kubectl config get-contexts # List clusters
+kubectl config use-context kind-fullcycle # Switch to cluster 'kind-fullcycle'
+kubectl api-resources # List k8s objects and their api version (Ex.: deployments apps/v1 Deployment)
+```
