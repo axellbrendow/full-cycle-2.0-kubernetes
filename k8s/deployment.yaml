@@ -14,6 +14,7 @@ spec:
       labels:
         app: goserver
     spec:
+      serviceAccount: server
       containers:
         - name: goserver
           image: axell13/hello-go
