@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: goserver
+spec:
+  selector:
+    app: goserver
+  type: NodePort
+  ports:
+    - name: goserver-service
+      port: 80
+      nodePort: 30001 # Port need to be > 30000 and < 32767
+      targetPort: 3002
+      protocol: TCP
+
+# Now, all PODS in the cluster have the port 30001 open and when you access it,
+# you will be redirected to the port 80 of this service

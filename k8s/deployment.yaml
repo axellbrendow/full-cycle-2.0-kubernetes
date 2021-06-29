@@ -1,0 +1,86 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: goserver
+  labels:
+    app: goserver
+spec:
+  selector:
+    matchLabels:
+      app: goserver
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: goserver
+    spec:
+      containers:
+        - name: goserver
+          image: axell13/hello-go
+
+          resources:
+            requests:
+              cpu: 100m
+              memory: 20Mi
+            limits:
+              cpu: 500m
+              memory: 25Mi
+
+          startupProbe: # just checks until pod is ready, after that, readiness and liveness start
+            httpGet:
+              path: /healthz
+              port: 3002
+            periodSeconds: 5
+            failureThreshold: 10
+            timeoutSeconds: 1
+            successThreshold: 1
+            initialDelaySeconds: 10
+
+          readinessProbe:
+            httpGet:
+              path: /healthz
+              port: 3002
+            periodSeconds: 5
+            failureThreshold: 1
+            timeoutSeconds: 1
+            successThreshold: 1
+            # initialDelaySeconds: 10
+
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 3002
+            periodSeconds: 5
+            failureThreshold: 1
+            timeoutSeconds: 1
+            successThreshold: 1
+            # initialDelaySeconds: 10
+
+          envFrom:
+            - configMapRef:
+                name: goserver-env
+            - secretRef:
+                name: goserver-secret
+
+          # env:
+          #   - name: NAME
+          #     valueFrom:
+          #       configMapKeyRef:
+          #         name: goserver-env
+          #         key: NAME
+          #   - name: AGE
+          #     valueFrom:
+          #       configMapKeyRef:
+          #         name: goserver-env
+          #         key: AGE
+
+          volumeMounts:
+            - mountPath: "/go/myfamily"
+              name: config
+      volumes:
+        - name: config
+          configMap:
+            name: goserver-configmap-family
+            items:
+              - key: members
+                path: "family.txt"
