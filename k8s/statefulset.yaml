@@ -1,3 +1,10 @@
+# StatefulSets are preferred for stateful applications like databases because
+# StatefulSets guarantees order of pod creation and deletion. If you're replacing
+# one of your pods, the new pod will be created only after the old pod is deleted.
+# That's important for a database application because you don't wanna have 2 pods
+# using the same persistent volume. Pods in a StatefulSet also have consistent
+# network names and persistent volumes. This means volume-1 will always be attached
+# to pod-1.
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
